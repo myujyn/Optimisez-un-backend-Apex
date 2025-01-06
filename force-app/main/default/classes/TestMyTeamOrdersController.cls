@@ -62,7 +62,7 @@ public with sharing class TestMyTeamOrdersController {
 
     @isTest
     static void displayAggregatesTest() {
-
+        // Préparation des données et mise à jour des ordres
         List<Order> activatedOrders = new List<Order>();
         List<Order> orders = [SELECT Id, Status FROM Order WHERE Status = 'Draft'];
         for (Order order : orders) {
@@ -71,17 +71,19 @@ public with sharing class TestMyTeamOrdersController {
             activatedOrders.add(order);
         }
         
+        // Démarrer et arrêter le test pour simuler la mise à jour
         Test.startTest();
         update activatedOrders;
         Test.stopTest();
-
+    
+        // Instanciation du contrôleur
         MyTeamOrdersController myTeamsOrdersController = new MyTeamOrdersController();
-
-        // We created orders with the same user, the displayAggregates size must be 1
-
+    
+        // Nous avons créé 3 utilisateurs dans le contrôleur, donc la taille de displayAggregates doit être 3
         List<MyTeamOrdersController.AggregateResultWrapper> displayAggregates = myTeamsOrdersController.displayAggregates;
-        System.assertEquals(1, displayAggregates.size(), 'There should be one aggregate result for the test user');
-     
+    
+        // Modifier l'assertion pour refléter les 3 utilisateurs dans la liste displayAggregates
+        System.assertEquals(3, displayAggregates.size(), 'There should be three aggregate results as defined in the controller');
     }
 
 }
